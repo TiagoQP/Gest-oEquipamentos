@@ -1,0 +1,72 @@
+@page
+@model Gest_oEquipamentos.Pages.Reservas.CreateModel
+
+@{
+    ViewData["Title"] = "Criar Reserva";
+}
+
+<h1>Criar Reserva</h1>
+
+<h4>Reserva</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="Reserva.AssistenteId" class="control-label"></label>
+                <input asp-for="Reserva.AssistenteId" class="form-control" />
+                <span asp-validation-for="Reserva.AssistenteId" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="Reserva.NomeProfessorBeneficiario" class="control-label"></label>
+                <input asp-for="Reserva.NomeProfessorBeneficiario" class="form-control" />
+                <span asp-validation-for="Reserva.NomeProfessorBeneficiario" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="Reserva.Sala" class="control-label"></label>
+                <input asp-for="Reserva.Sala" class="form-control" />
+                <span asp-validation-for="Reserva.Sala" class="text-danger"></span>
+            </div>
+            
+           <div class="form-group mb-3">
+    <label asp-for="Reserva.EquipamentoId" class="control-label"></label>
+    <select asp-for="Reserva.EquipamentoId" class="form-control" asp-items="ViewBag.EquipamentoId"></select>
+    <span asp-validation-for="Reserva.EquipamentoId" class="text-danger"></span>
+</div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="Reserva.Data" class="control-label"></label>
+                <input asp-for="Reserva.Data" class="form-control" />
+                <span asp-validation-for="Reserva.Data" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="Reserva.Periodo" class="control-label"></label>
+                <input asp-for="Reserva.Periodo" class="form-control" />
+                <span asp-validation-for="Reserva.Periodo" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Reserva.Status" class="control-label"></label>
+                <select asp-for="Reserva.Status" class="form-control" asp-items="Html.GetEnumSelectList<GestaoReservasUni.Models.StatusSolicitacao>()"></select>
+                <span asp-validation-for="Reserva.Status" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

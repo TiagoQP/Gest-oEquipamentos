@@ -1,0 +1,80 @@
+@page
+@model Gest_oEquipamentos.Pages.Reservas.IndexModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Reserva[0].AssistenteId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reserva[0].NomeProfessorBeneficiario)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reserva[0].Sala)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reserva[0].Equipamento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reserva[0].Data)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reserva[0].Periodo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reserva[0].Status)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Reserva) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.AssistenteId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NomeProfessorBeneficiario)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sala)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Equipamento.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Data)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Periodo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</body>
+</html>
