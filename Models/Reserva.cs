@@ -1,22 +1,37 @@
 using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace GestaoReservasUni.Models
 {
-    public enum StatusSolicitacao { Reservado, EmUso, ProntoParaRetirada, Concluido }
-
     public class Reserva
     {
         public int Id { get; set; }
-        public int AssistenteId { get; set; } 
-        public string NomeProfessorBeneficiario { get; set; } = string.Empty; 
-        public string Sala { get; set; } = string.Empty; 
-        
-        // Novas propriedades para vincular ao Equipamento sob demanda:
-        public int EquipamentoId { get; set; }
-        public Equipamento? Equipamento { get; set; }
+    
 
+        [Required]
+        [Display(Name = "ID do Assistente")]
+        public int AssistenteId { get; set; }
+
+        [Required]
+        [Display(Name = "Professor")]
+        public string NomeProfessorBeneficiario { get; set; } = string.Empty;
+
+        [Required]
+        public string Sala { get; set; } = string.Empty;
+
+        [Required]
+        [DataType(DataType.DateTime)]
         public DateTime Data { get; set; }
-        public string Periodo { get; set; } = string.Empty; // Ex: "Noite - 1º Tempo"
-        public StatusSolicitacao Status { get; set; } = StatusSolicitacao.Reservado;
+
+        [Required]
+        [Display(Name = "Período")]
+        public string Periodo { get; set; } = string.Empty;
+
+        [Required]
+        public string Status { get; set; } = "Pendente";
+
+        // NOVA PROPRIEDADE: Uma reserva agora tem uma lista de vários itens/equipamentos
+        public List<ItemReserva> ItensReserva { get; set; } = new List<ItemReserva>();
     }
 }

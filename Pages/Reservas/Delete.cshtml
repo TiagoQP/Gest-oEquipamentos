@@ -2,72 +2,55 @@
 @model Gest_oEquipamentos.Pages.Reservas.DeleteModel
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Excluir Reserva";
 }
 
-<!DOCTYPE html>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card card-dark-blue shadow-lg border border-danger">
+                <div class="card-header border-bottom border-danger py-3">
+                    <h2 class="mb-0 fs-4 fw-bold text-danger">⚠️ Confirmar Cancelamento da Reserva</h2>
+                </div>
+                <div class="card-body">
+                    <div class="alert bg-transparent border border-warning text-warning mb-4" role="alert">
+                        <strong>Atenção!</strong> Ao excluir esta reserva, todos os equipamentos vinculados abaixo retornarão automaticamente para o estoque disponível.
+                    </div>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Delete</title>
-</head>
-<body>
+                    <dl class="row my-3">
+                        <dt class="col-sm-4 fw-bold mb-3">Professor</dt>
+                        <dd class="col-sm-8 mb-3 text-professor-highlight fw-bold">
+                            @Html.DisplayFor(model => model.Reserva.NomeProfessorBeneficiario)
+                        </dd>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Reserva</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Reserva.AssistenteId)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Reserva.AssistenteId)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Reserva.NomeProfessorBeneficiario)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Reserva.NomeProfessorBeneficiario)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Reserva.Sala)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Reserva.Sala)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Reserva.Equipamento)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Reserva.Equipamento.Id)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Reserva.Data)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Reserva.Data)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Reserva.Periodo)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Reserva.Periodo)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Reserva.Status)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Reserva.Status)
-        </dd>
-    </dl>
-    
-    <form method="post">
-        <input type="hidden" asp-for="Reserva.Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-page="./Index">Back to List</a>
-    </form>
+                        <dt class="col-sm-4 fw-bold mb-3">Sala / Horário</dt>
+                        <dd class="col-sm-8 mb-3">
+                            @Html.DisplayFor(model => model.Reserva.Sala) — @Html.DisplayFor(model => model.Reserva.Data) (@Html.DisplayFor(model => model.Reserva.Periodo))
+                        </dd>
+
+                        <dt class="col-sm-4 fw-bold mb-3">Equipamentos no Carrinho</dt>
+                        <dd class="col-sm-8 mb-3">
+                            <ul class="list-unstyled mb-0">
+                                @foreach (var item in Model.Reserva.ItensReserva)
+                                {
+                                    <li class="mb-1 text-light">🛠️ @item.Equipamento?.Nome (@item.Quantidade unidades)</li>
+                                }
+                            </ul>
+                        </dd>
+                    </dl>
+
+                    <hr class="border-secondary my-4" />
+
+                    <form method="post">
+                        <input type="hidden" asp-for="Reserva.Id" />
+                        
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-outline-table-delete px-4 fw-bold">Sim, Cancelar Reserva</button>
+                            <a asp-page="./Index" class="btn btn-outline-back px-4">Desistir e Voltar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-</body>
-</html>

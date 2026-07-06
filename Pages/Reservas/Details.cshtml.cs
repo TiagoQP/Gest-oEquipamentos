@@ -28,16 +28,21 @@ namespace Gest_oEquipamentos.Pages.Reservas
                 return NotFound();
             }
 
-            var reserva = await _context.Reservas.FirstOrDefaultAsync(m => m.Id == id);
+            // Alterado para carregar a lista de equipamentos do carrinho
+            var reserva = await _context.Reservas
+                .Include(r => r.ItensReserva)
+                    .ThenInclude(i => i.Equipamento)
+                .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (reserva is not null)
+            if (reserva == null)
+            {
+                return NotFound();
+            }
+            else
             {
                 Reserva = reserva;
-
-                return Page();
             }
-
-            return NotFound();
+            return Page();
         }
     }
 }

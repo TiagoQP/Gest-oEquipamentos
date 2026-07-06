@@ -23,8 +23,11 @@ namespace Gest_oEquipamentos.Pages.Reservas
 
         public async Task OnGetAsync()
         {
+            // Agora trazemos os Itens da Reserva e, para cada item, incluímos o Equipamento correspondente
             Reserva = await _context.Reservas
-                .Include(r => r.Equipamento).ToListAsync();
+                .Include(r => r.ItensReserva)
+                    .ThenInclude(i => i.Equipamento)
+                .ToListAsync();
         }
     }
 }

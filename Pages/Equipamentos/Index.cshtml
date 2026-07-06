@@ -2,55 +2,78 @@
 @model Gest_oEquipamentos.Pages.Equipamentos.IndexModel
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Lista de Equipamentos";
 }
 
-<!DOCTYPE html>
+<div class="container mt-4">
+    <!-- Topo do painel com título amarelo e botão neon -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold" style="color: #ffcc00;">🛠️ Painel de Equipamentos</h2>
+        <a asp-page="Create" class="btn btn-outline-save fw-bold px-4">➕ Novo Equipamento</a>
+    </div>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Equipamento[0].Nome)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Equipamento[0].QuantidadeTotal)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Equipamento[0].QuantidadeDisponivel)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Equipamento) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.QuantidadeTotal)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.QuantidadeDisponivel)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
-</body>
-</html>
+    <!-- Container do Cartão em Dark Blue -->
+    <div class="card card-dark-blue shadow-lg">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-dark-blue table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th class="ps-3">
+                                @Html.DisplayNameFor(model => model.Equipamento[0].Nome)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Equipamento[0].QuantidadeTotal)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Equipamento[0].QuantidadeDisponivel)
+                            </th>
+                            <th class="text-center pe-3" style="width: 220px;">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.Equipamento.Any())
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center py-4" style="color: #a4b3c6;">
+                                    Nenhum equipamento cadastrado no momento.
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (var item in Model.Equipamento) {
+                                <tr>
+                                    <!-- Nome do equipamento destacado com a nossa classe amarela -->
+                                    <td class="ps-3 fw-bold text-professor-highlight">
+                                        @Html.DisplayFor(modelItem => item.Nome)
+                                    </td>
+                                    <td>
+                                        <span class="badge border border-secondary text-white bg-transparent fs-6">
+                                            @Html.DisplayFor(modelItem => item.QuantidadeTotal)
+                                        </span>
+                                    </td>
+                                    <td>
+                                        @{
+                                            var borderClass = item.QuantidadeDisponivel > 0 ? "border-success text-success" : "border-danger text-danger";
+                                        }
+                                        <span class="badge border @borderClass bg-transparent fs-6">
+                                            @Html.DisplayFor(modelItem => item.QuantidadeDisponivel)
+                                        </span>
+                                    </td>
+                                    <td class="text-center pe-3">
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-outline-table-edit fw-bold">Editar</a>
+                                            <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-outline-table-view">Ver</a>
+                                            <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-outline-table-delete">Excluir</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -29,3 +29,117 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+/* Fundo azul escuro personalizado para os cartões e tabelas */
+.card-dark-blue {
+    background-color: #0b1a30 !important;
+    border: 1px solid #1e3a63 !important;
+    color: #ffcc00 !important; /* Texto Amarelo */
+}
+
+/* Garante que os rótulos e títulos fiquem amarelos */
+.card-dark-blue label, 
+.card-dark-blue dt, 
+.card-dark-blue h2 {
+    color: #ffcc00 !important;
+}
+
+/*Inputs customizados para combinarem com o tema escuro */
+.card-dark-blue .form-control,
+.card-dark-blue .form-select {
+    background-color: #112240 !important;
+    border: 1px solid #1e3a63 !important;
+    color: #ffffff !important;
+}
+
+.card-dark-blue .form-control:focus,
+.card-dark-blue .form-select:focus {
+    border-color: #ffcc00 !important;
+    box-shadow: 0 0 0 0.25rem rgba(255, 204, 0, 0.25) !important;
+}
+
+/* --- Botões Customizados com Bordas Estilizadas --- */
+
+/* Botão Salvar / Confirmar (Borda Ciano Neon) */
+.btn-outline-save {
+    background: transparent !important;
+    color: #00f5d4 !important;
+    border: 2px solid #00f5d4 !important;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+.btn-outline-save:hover {
+    background-color: #00f5d4 !important;
+    color: #0b1a30 !important;
+}
+
+/* Botão Voltar / Cancelar (Borda Branca/Gelo) */
+.btn-outline-back {
+    background: transparent !important;
+    color: #e0e1dd !important;
+    border: 2px solid #e0e1dd !important;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+.btn-outline-back:hover {
+    background-color: #e0e1dd !important;
+    color: #0b1a30 !important;
+}
+/* Customização definitiva para tabelas dentro do tema escuro */
+.table-dark-blue {
+    background-color: #0b1a30 !important;
+    color: #ffffff !important;
+    border-collapse: collapse;
+}
+
+/* Força o cabeçalho a ficar azul escuro com letras amarelas */
+.table-dark-blue thead th {
+    background-color: #112240 !important;
+    color: #ffcc00 !important; /* Cabeçalho Amarelo */
+    border-bottom: 2px solid #1e3a63 !important;
+}
+
+/* FORÇA todas as células do corpo a herdar o fundo azul escuro e o texto claro */
+.table-dark-blue tbody td {
+    background-color: #0b1a30 !important;
+    color: #e0e1dd !important; /* Texto claro legível */
+    border-bottom: 1px solid #1e3a63 !important;
+}
+
+/* Efeito hover corrigido para as células */
+.table-dark-blue.table-hover tbody tr:hover td {
+    background-color: #112240 !important;
+    color: #ffcc00 !important;
+}
+
+/* Ajuste sutil para o texto do Professor ficar destacado em amarelo/laranja claro no fundo escuro */
+.text-professor-highlight {
+    color: #ffd43b !important;
+}
+
+/* Ajuste fino para os botões de ação em formato menor dentro da tabela */
+.btn-outline-table-edit {
+    color: #ff9f1c !important;
+    border: 1px solid #ff9f1c !important;
+}
+.btn-outline-table-edit:hover {
+    background-color: #ff9f1c !important;
+    color: #0b1a30 !important;
+}
+
+.btn-outline-table-view {
+    color: #00f5d4 !important;
+    border: 1px solid #00f5d4 !important;
+}
+.btn-outline-table-view:hover {
+    background-color: #00f5d4 !important;
+    color: #0b1a30 !important;
+}
+
+.btn-outline-table-delete {
+    color: #ff4d4d !important;
+    border: 1px solid #ff4d4d !important;
+}
+.btn-outline-table-delete:hover {
+    background-color: #ff4d4d !important;
+    color: #ffffff !important;
+}

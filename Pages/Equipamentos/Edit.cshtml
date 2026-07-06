@@ -2,53 +2,54 @@
 @model Gest_oEquipamentos.Pages.Equipamentos.EditModel
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Editar Equipamento";
 }
 
-<!DOCTYPE html>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card card-dark-blue shadow-lg">
+                <div class="card-header border-bottom border-secondary py-3">
+                    <h2 class="mb-0 fs-4 fw-bold">⚙️ Editar Cadastro de Equipamento</h2>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        
+                        <!-- Campo oculto obrigatório para o mapeamento da edição funcionar -->
+                        <input type="hidden" asp-for="Equipamento.Id" />
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Edit</title>
-</head>
-<body>
+                        <div class="form-group mb-3">
+                            <label asp-for="Equipamento.Nome" class="form-label fw-bold">Nome do Equipamento</label>
+                            <input asp-for="Equipamento.Nome" class="form-control" />
+                            <span asp-validation-for="Equipamento.Nome" class="text-danger"></span>
+                        </div>
 
-<h4>Equipamento</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Equipamento.Id" />
-            <div class="form-group">
-                <label asp-for="Equipamento.Nome" class="control-label"></label>
-                <input asp-for="Equipamento.Nome" class="form-control" />
-                <span asp-validation-for="Equipamento.Nome" class="text-danger"></span>
+                        <div class="form-group mb-3">
+                            <label asp-for="Equipamento.QuantidadeTotal" class="form-label fw-bold">Quantidade Total</label>
+                            <input asp-for="Equipamento.QuantidadeTotal" class="form-control" type="number" min="0" />
+                            <span asp-validation-for="Equipamento.QuantidadeTotal" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label asp-for="Equipamento.QuantidadeDisponivel" class="form-label fw-bold">Quantidade Disponível</label>
+                            <input asp-for="Equipamento.QuantidadeDisponivel" class="form-control" type="number" min="0" />
+                            <span asp-validation-for="Equipamento.QuantidadeDisponivel" class="text-danger"></span>
+                        </div>
+
+                        <hr class="border-secondary my-4" />
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-outline-save px-4">Salvar Alterações</button>
+                            <a asp-page="./Index" class="btn btn-outline-back px-4">Voltar para a Lista</a>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Equipamento.QuantidadeTotal" class="control-label"></label>
-                <input asp-for="Equipamento.QuantidadeTotal" class="form-control" />
-                <span asp-validation-for="Equipamento.QuantidadeTotal" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Equipamento.QuantidadeDisponivel" class="control-label"></label>
-                <input asp-for="Equipamento.QuantidadeDisponivel" class="form-control" />
-                <span asp-validation-for="Equipamento.QuantidadeDisponivel" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-page="./Index">Back to List</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-</body>
-</html>

@@ -2,45 +2,55 @@
 @model Gest_oEquipamentos.Pages.Equipamentos.DetailsModel
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Detalhes do Equipamento";
 }
 
-<!DOCTYPE html>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card card-dark-blue shadow-lg">
+                <div class="card-header border-bottom border-secondary py-3">
+                    <h2 class="mb-0 fs-4 fw-bold">🔍 Detalhes do Equipamento</h2>
+                </div>
+                <div class="card-body">
+                    <dl class="row my-3">
+                        <dt class="col-sm-5 fw-bold mb-3">
+                            Nome do Equipamento
+                        </dt>
+                        <dd class="col-sm-7 mb-3 text-professor-highlight fw-bold">
+                            @Html.DisplayFor(model => model.Equipamento.Nome)
+                        </dd>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Details</title>
-</head>
-<body>
+                        <dt class="col-sm-5 fw-bold mb-3">
+                            Quantidade Total
+                        </dt>
+                        <dd class="col-sm-7 mb-3">
+                            <span class="badge border border-secondary text-white bg-transparent fs-6">
+                                @Html.DisplayFor(model => model.Equipamento.QuantidadeTotal)
+                            </span>
+                        </dd>
 
-<div>
-    <h4>Equipamento</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Equipamento.Nome)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Equipamento.Nome)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Equipamento.QuantidadeTotal)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Equipamento.QuantidadeTotal)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Equipamento.QuantidadeDisponivel)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Equipamento.QuantidadeDisponivel)
-        </dd>
-    </dl>
+                        <dt class="col-sm-5 fw-bold mb-3">
+                            Quantidade Disponível
+                        </dt>
+                        <dd class="col-sm-7 mb-3">
+                            @{
+                                var borderClass = Model.Equipamento.QuantidadeDisponivel > 0 ? "border-success text-success" : "border-danger text-danger";
+                            }
+                            <span class="badge border @borderClass bg-transparent fs-6">
+                                @Html.DisplayFor(model => model.Equipamento.QuantidadeDisponivel)
+                            </span>
+                        </dd>
+                    </dl>
+
+                    <hr class="border-secondary my-4" />
+
+                    <div class="d-flex gap-2">
+                        <a asp-page="./Edit" asp-route-id="@Model.Equipamento.Id" class="btn btn-outline-edit px-4">Editar Equipamento</a>
+                        <a asp-page="./Index" class="btn btn-outline-back px-4">Voltar para a Lista</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-page="./Edit" asp-route-id="@Model.Equipamento.Id">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
-</div>
-</body>
-</html>

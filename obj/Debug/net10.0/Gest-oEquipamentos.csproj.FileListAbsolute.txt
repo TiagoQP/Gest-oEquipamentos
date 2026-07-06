@@ -290,7 +290,6 @@
 /workspaces/Gest-oEquipamentos/obj/Debug/net10.0/scopedcss/Pages/Shared/_Layout.cshtml.rz.scp.css
 /workspaces/Gest-oEquipamentos/obj/Debug/net10.0/scopedcss/bundle/Gest-oEquipamentos.styles.css
 /workspaces/Gest-oEquipamentos/obj/Debug/net10.0/scopedcss/projectbundle/Gest-oEquipamentos.bundle.scp.css
-/workspaces/Gest-oEquipamentos/obj/Debug/net10.0/compressed/hp0l399nzv-{0}-b9sayid5wm-b9sayid5wm.gz
 /workspaces/Gest-oEquipamentos/obj/Debug/net10.0/compressed/bure7tbwp9-{0}-61n19gt1b8-61n19gt1b8.gz
 /workspaces/Gest-oEquipamentos/obj/Debug/net10.0/compressed/z5ost09s8x-{0}-xtxxf3hu2r-xtxxf3hu2r.gz
 /workspaces/Gest-oEquipamentos/obj/Debug/net10.0/compressed/ol59duxqia-{0}-bqjiyaj88i-bqjiyaj88i.gz
@@ -365,3 +364,4 @@
 /workspaces/Gest-oEquipamentos/obj/Debug/net10.0/Gest-oEquipamentos.pdb
 /workspaces/Gest-oEquipamentos/obj/Debug/net10.0/Gest-oEquipamentos.genruntimeconfig.cache
 /workspaces/Gest-oEquipamentos/obj/Debug/net10.0/ref/Gest-oEquipamentos.dll
+/workspaces/Gest-oEquipamentos/obj/Debug/net10.0/compressed/hp0l399nzv-{0}-jp2hdccnlw-jp2hdccnlw.gz

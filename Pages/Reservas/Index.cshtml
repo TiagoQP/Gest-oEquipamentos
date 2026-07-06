@@ -1,76 +1,92 @@
 @page
 @model Gest_oEquipamentos.Pages.Reservas.IndexModel
+
 @{
-    Layout = "_Layout";
-    ViewData["Title"] = "Lista de Reservas";
+    ViewData["Title"] = "Controle de Reservas";
 }
 
 <div class="container mt-4">
-    <h2>Lista de Reservas</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold" style="color: #ffcc00;">📋 Painel de Reservas</h2>
+        <a asp-page="Create" class="btn btn-outline-save fw-bold px-4">➕ Nova Reserva</a>
+    </div>
 
-    <p>
-        <a asp-page="Create" class="btn btn-primary">Criar Nova Reserva</a>
-    </p>
-
-    <table class="table table-striped table-hover mt-3">
-        <!-- Aqui continua o resto do seu código original (thead, tbody, o loop foreach, etc.) -->    <a asp-page="Create">Create New</a>
-</p>
-<table class="table table-striped table-hover mt-4">    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Reserva[0].AssistenteId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Reserva[0].NomeProfessorBeneficiario)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Reserva[0].Sala)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Reserva[0].Equipamento)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Reserva[0].Data)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Reserva[0].Periodo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Reserva[0].Status)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Reserva) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.AssistenteId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NomeProfessorBeneficiario)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Sala)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Equipamento.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Data)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Periodo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-            <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
-            <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Details</a>
-            <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <div class="card card-dark-blue shadow-lg">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-dark-blue table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th class="ps-3">Professor</th>
+                            <th>Sala</th>
+                            <th>Equipamentos Reservados</th>
+                            <th>Data e Horário</th>
+                            <th>Período</th>
+                            <th>Status</th>
+                            <th class="text-center pe-3" style="width: 220px;">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.Reserva.Any())
+                        {
+                            <tr>
+                                <td colspan="7" class="text-center py-4" style="color: #a4b3c6;">
+                                    Nenhuma reserva registrada no momento.
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (var item in Model.Reserva) {
+                                <tr>
+                                    <td class="ps-3 fw-bold text-professor-highlight">
+                                        @Html.DisplayFor(modelItem => item.NomeProfessorBeneficiario)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Sala)
+                                    </td>
+                                    <td>
+                                        <!-- Exibe a lista de equipamentos em formato de badges -->
+                                        @if (item.ItensReserva != null && item.ItensReserva.Any())
+                                        {
+                                            <div class="d-flex flex-wrap gap-1">
+                                                @foreach (var subItem in item.ItensReserva)
+                                                {
+                                                    <span class="badge border border-secondary text-white bg-transparent">
+                                                        @subItem.Equipamento?.Nome (@subItem.Quantidade x)
+                                                    </span>
+                                                }
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted fs-7">Nenhum item</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Data)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Periodo)
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-transparent border border-warning text-warning">
+                                            @Html.DisplayFor(modelItem => item.Status)
+                                        </span>
+                                    </td>
+                                    <td class="text-center pe-3">
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-outline-table-edit fw-bold">Editar</a>
+                                            <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-outline-table-view">Ver</a>
+                                            <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-outline-table-delete">Excluir</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>

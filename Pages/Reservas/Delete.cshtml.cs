@@ -29,12 +29,14 @@ namespace Gest_oEquipamentos.Pages.Reservas
                 return NotFound();
             }
 
-            var reserva = await _context.Reservas.FirstOrDefaultAsync(m => m.Id == id);
+            var reserva = await _context.Reservas
+                .Include(r => r.ItensReserva)
+                    .ThenInclude(i => i.Equipamento)
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             if (reserva is not null)
             {
                 Reserva = reserva;
-
                 return Page();
             }
 
@@ -48,11 +50,24 @@ namespace Gest_oEquipamentos.Pages.Reservas
                 return NotFound();
             }
 
-            var reserva = await _context.Reservas.FindAsync(id);
+            // Carrega a reserva com seus itens e equipamentos incluídos
+            var reserva = await _context.Reservas
+                .Include(r => r.ItensReserva)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
             if (reserva != null)
             {
-                Reserva = reserva;
-                _context.Reservas.Remove(Reserva);
+                // Devolve o estoque de todos os equipamentos do carrinho
+                foreach (var item in reserva.ItensReserva)
+                {
+                    var equipamento = await _context.Equipamentos.FindAsync(item.EquipamentoId);
+                    if (equipamento != null)
+                    {
+                        equipamento.QuantidadeDisponivel += item.Quantidade;
+                    }
+                }
+
+                _context.Reservas.Remove(reserva);
                 await _context.SaveChangesAsync();
             }
 

@@ -2,71 +2,185 @@
 @model Gest_oEquipamentos.Pages.Reservas.CreateModel
 
 @{
-    ViewData["Title"] = "Criar Reserva";
+    ViewData["Title"] = "Nova Reserva";
 }
 
-<h1>Criar Reserva</h1>
+<div class="container mt-4">
+    <form method="post" id="formReserva">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-<h4>Reserva</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
-            <div class="form-group mb-3">
-                <label asp-for="Reserva.AssistenteId" class="control-label"></label>
-                <input asp-for="Reserva.AssistenteId" class="form-control" />
-                <span asp-validation-for="Reserva.AssistenteId" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group mb-3">
-                <label asp-for="Reserva.NomeProfessorBeneficiario" class="control-label"></label>
-                <input asp-for="Reserva.NomeProfessorBeneficiario" class="form-control" />
-                <span asp-validation-for="Reserva.NomeProfessorBeneficiario" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group mb-3">
-                <label asp-for="Reserva.Sala" class="control-label"></label>
-                <input asp-for="Reserva.Sala" class="form-control" />
-                <span asp-validation-for="Reserva.Sala" class="text-danger"></span>
-            </div>
-            
-           <div class="form-group mb-3">
-    <label asp-for="Reserva.EquipamentoId" class="control-label"></label>
-    <select asp-for="Reserva.EquipamentoId" class="form-control" asp-items="ViewBag.EquipamentoId"></select>
-    <span asp-validation-for="Reserva.EquipamentoId" class="text-danger"></span>
-</div>
-            
-            <div class="form-group mb-3">
-                <label asp-for="Reserva.Data" class="control-label"></label>
-                <input asp-for="Reserva.Data" class="form-control" />
-                <span asp-validation-for="Reserva.Data" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group mb-3">
-                <label asp-for="Reserva.Periodo" class="control-label"></label>
-                <input asp-for="Reserva.Periodo" class="form-control" />
-                <span asp-validation-for="Reserva.Periodo" class="text-danger"></span>
+        <div class="row">
+            <!-- Coluna 1: Dados Gerais da Reserva -->
+            <div class="col-md-5 mb-4">
+                <div class="card card-dark-blue shadow-lg h-100">
+                    <div class="card-header border-bottom border-secondary py-3">
+                        <h2 class="mb-0 fs-5 fw-bold">📅 Dados da Reserva</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group mb-3">
+                            <label asp-for="Reserva.AssistenteId" class="form-label fw-bold">ID do Assistente</label>
+                            <input asp-for="Reserva.AssistenteId" class="form-control" type="number" />
+                            <span asp-validation-for="Reserva.AssistenteId" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Reserva.NomeProfessorBeneficiario" class="form-label fw-bold">Professor Beneficiário</label>
+                            <input asp-for="Reserva.NomeProfessorBeneficiario" class="form-control" placeholder="Nome do Professor" />
+                            <span asp-validation-for="Reserva.NomeProfessorBeneficiario" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Reserva.Sala" class="form-label fw-bold">Sala</label>
+                            <input asp-for="Reserva.Sala" class="form-control" placeholder="Ex: Laboratório 3, Sala 202" />
+                            <span asp-validation-for="Reserva.Sala" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Reserva.Data" class="form-label fw-bold">Data e Horário</label>
+                            <input asp-for="Reserva.Data" class="form-control" />
+                            <span asp-validation-for="Reserva.Data" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Reserva.Periodo" class="form-label fw-bold">Período</label>
+                            <select asp-for="Reserva.Periodo" class="form-control form-select">
+                                <option value="Matutino">Matutino</option>
+                                <option value="Vespertino">Vespertino</option>
+                                <option value="Noturno">Noturno</option>
+                            </select>
+                            <span asp-validation-for="Reserva.Periodo" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="Reserva.Status" class="control-label"></label>
-                <select asp-for="Reserva.Status" class="form-control" asp-items="Html.GetEnumSelectList<GestaoReservasUni.Models.StatusSolicitacao>()"></select>
-                <span asp-validation-for="Reserva.Status" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+            <!-- Coluna 2: Carrinho de Equipamentos -->
+            <div class="col-md-7 mb-4">
+                <div class="card card-dark-blue shadow-lg h-100">
+                    <div class="card-header border-bottom border-secondary py-3">
+                        <h2 class="mb-0 fs-5 fw-bold">🛒 Carrinho de Equipamentos</h2>
+                    </div>
+                    <div class="card-body d-flex flex-column justify-content-between">
+                        
+                        <!-- Seleção do Item -->
+                        <div class="row align-items-end mb-4">
+                            <div class="col-sm-7 mb-2 mb-sm-0">
+                                <label class="form-label fw-bold">Selecionar Equipamento</label>
+                                <select id="selectEquipamento" class="form-control form-select" asp-items="ViewBag.EquipamentosLista">
+                                    <option value="">-- Escolha um Equipamento --</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-3 mb-2 mb-sm-0">
+                                <label class="form-label fw-bold">Qtd</label>
+                                <input id="inputQtd" type="number" class="form-control" value="1" min="1" />
+                            </div>
+                            <div class="col-sm-2">
+<!-- Adicionando type="button" para o HTML saber que ele NÃO deve dar submit na página -->
+<button type="button" id="btnAdicionar" class="btn btn-outline-save w-100 fw-bold">Add</button>                            </div>
+                        </div>
 
-<div>
-    <a asp-page="Index">Back to List</a>
+                        <!-- Tabela Temporária do Carrinho -->
+                        <div class="table-responsive flex-grow-1" style="min-height: 150px;">
+                            <table class="table table-dark-blue table-hover align-middle mb-0" id="tabelaCarrinho">
+                                <thead>
+                                    <tr>
+                                        <th>Equipamento</th>
+                                        <th style="width: 100px;">Quantidade</th>
+                                        <th style="width: 80px;" class="text-center">Ação</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="corpoCarrinho">
+                                    <tr id="linhaVazia">
+                                        <td colspan="3" class="text-center text-muted py-4">Nenhum equipamento adicionado ainda.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Container para guardar os inputs ocultos que vão pro C# -->
+                        <div id="inputsOcultosContainer"></div>
+
+                        <div class="mt-4 pt-3 border-top border-secondary d-flex gap-2">
+                            <button type="submit" class="btn btn-outline-save px-4 fw-bold">Finalizar Reserva</button>
+                            <a asp-page="Index" class="btn btn-outline-back px-4">Voltar</a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        let carrinho = [];
+
+        const selectEquipamento = document.getElementById('selectEquipamento');
+        const inputQtd = document.getElementById('inputQtd');
+        const btnAdicionar = document.getElementById('btnAdicionar');
+        const corpoCarrinho = document.getElementById('corpoCarrinho');
+        const linhaVazia = document.getElementById('linhaVazia');
+        const inputsOcultosContainer = document.getElementById('inputsOcultosContainer');
+
+        btnAdicionar.addEventListener('click', function () {
+            const id = selectEquipamento.value;
+            const nome = selectEquipamento.options[selectEquipamento.selectedIndex].text;
+            const qtd = parseInt(inputQtd.value);
+
+            if (!id) {
+                alert('Selecione um equipamento válido.');
+                return;
+            }
+            if (qtd <= 0 || isNaN(qtd)) {
+                alert('A quantidade deve ser maior que zero.');
+                return;
+            }
+
+            const itemExistente = carrinho.find(item => item.id === id);
+            if (itemExistente) {
+                itemExistente.qtd += qtd;
+            } else {
+                carrinho.push({ id, nome, qtd });
+            }
+
+            renderizarCarrinho();
+            selectEquipamento.value = "";
+            inputQtd.value = "1";
+        });
+
+        function removerItem(id) {
+            carrinho = carrinho.filter(item => item.id !== id);
+            renderizarCarrinho();
+        }
+
+        function renderizarCarrinho() {
+            corpoCarrinho.innerHTML = "";
+            inputsOcultosContainer.innerHTML = "";
+
+            if (carrinho.length === 0) {
+                corpoCarrinho.appendChild(linhaVazia);
+                return;
+            }
+
+            carrinho.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="fw-bold text-light">${item.nome}</td>
+                    <td><span class="badge border border-secondary text-white bg-transparent fs-6">${item.qtd}</span></td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-sm btn-outline-table-delete fw-bold" onclick="removerItem('${item.id}')">Remover</button>
+                    </td>
+                `;
+                corpoCarrinho.appendChild(tr);
+
+                inputsOcultosContainer.innerHTML += `
+                    <input type="hidden" name="ItensCarrinho[${index}].EquipamentoId" value="${item.id}" />
+                    <input type="hidden" name="ItensCarrinho[${index}].Quantidade" value="${item.qtd}" />
+                `;
+            });
+        }
+    </script>
 }
