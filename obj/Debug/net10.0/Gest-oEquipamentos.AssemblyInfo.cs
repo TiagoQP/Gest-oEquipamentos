@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Gest-oEquipamentos")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+72edcffa31e369fca9fefe96dd1f9f2a0a1715c3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+31cc7fe90acc11d11b770a37624ff13cf67fd2b3")]
 [assembly: System.Reflection.AssemblyProductAttribute("Gest-oEquipamentos")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Gest-oEquipamentos")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

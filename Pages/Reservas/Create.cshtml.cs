@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using GestaoReservasUni.Data;
 using GestaoReservasUni.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace Gest_oEquipamentos.Pages.Reservas
 {
@@ -20,83 +20,102 @@ namespace Gest_oEquipamentos.Pages.Reservas
             _context = context;
         }
 
+        private void CarregarEquipamentos()
+        {
+            var equipamentos = _context.Equipamentos.OrderBy(e => e.Nome).ToList();
+            ViewData["EquipamentosLista"] = new SelectList(equipamentos, "Id", "Nome");
+        }
+
         public IActionResult OnGet()
         {
-            // Carrega os equipamentos para preencher o select da tela
-            ViewData["EquipamentosLista"] = new SelectList(_context.Equipamentos.Where(e => e.QuantidadeDisponivel > 0), "Id", "Nome");
+            CarregarEquipamentos();
             return Page();
         }
 
         [BindProperty]
         public Reserva Reserva { get; set; } = default!;
 
-        // Esta propriedade receberá os itens do carrinho enviados pelo formulário
         [BindProperty]
-        public List<ItemReserva> ItensCarrinho { get; set; } = new List<ItemReserva>();
+        public List<int> ItemEquipamentoIds { get; set; } = new List<int>();
 
-     // ADICIONADO: [FromForm] List<ItemReserva> itensCarrinho direto no parâmetro do método
-public async Task<IActionResult> OnPostAsync([FromForm] List<ItemReserva> itensCarrinho)
-{
-    // Se o BindProperty falhar, nós injetamos manualmente o parâmetro recebido do formulário
-    if (itensCarrinho != null && itensCarrinho.Any())
-    {
-        ItensCarrinho = itensCarrinho;
-    }
+        [BindProperty]
+        public List<int> ItemQuantidades { get; set; } = new List<int>();
 
-    ModelState.Remove("ItensCarrinho");
-    ModelState.Remove("Reserva.ItensReserva");
-
-    // Forçamos a limpeza de erros dos itens do carrinho para o ModelState não travar o IsValid
-    foreach (var key in ModelState.Keys.Where(k => k.Contains("ItensCarrinho") || k.Contains("ItensReserva")).ToList())
-    {
-        ModelState.Remove(key);
-    }
-
-    if (!ModelState.IsValid)
-    {
-        ViewData["EquipamentosLista"] = new SelectList(_context.Equipamentos.Where(e => e.QuantidadeDisponivel > 0), "Id", "Nome");
-        return Page();
-    }
-
-    if (ItensCarrinho == null || !ItensCarrinho.Any())
-    {
-        ModelState.AddModelError(string.Empty, "Você precisa adicionar pelo menos um equipamento ao carrinho.");
-        ViewData["EquipamentosLista"] = new SelectList(_context.Equipamentos.Where(e => e.QuantidadeDisponivel > 0), "Id", "Nome");
-        return Page();
-    }
-
-    // ... restante do código do OnPostAsync continua exatamente igual abaixo ...
-
-    // Inicializa a lista de itens da reserva para evitar nulos
-    Reserva.ItensReserva = new List<ItemReserva>();
-
-    // Validar estoque e associar itens à reserva
-    foreach (var item in ItensCarrinho)
-    {
-        var equip = await _context.Equipamentos.FindAsync(item.EquipamentoId);
-        if (equip == null || equip.QuantidadeDisponivel < item.Quantidade)
+        public async Task<IActionResult> OnPostAsync()
         {
-            ModelState.AddModelError(string.Empty, $"Estoque insuficiente para o equipamento: {equip?.Nome ?? "Desconhecido"}.");
-            ViewData["EquipamentosLista"] = new SelectList(_context.Equipamentos.Where(e => e.QuantidadeDisponivel > 0), "Id", "Nome");
-            return Page();
+            if (!ModelState.IsValid)
+            {
+                CarregarEquipamentos();
+                return Page();
+            }
+
+            var novosItens = new List<ItemReserva>();
+            for (int i = 0; i < ItemEquipamentoIds.Count; i++)
+            {
+                if (ItemEquipamentoIds[i] > 0 && ItemQuantidades[i] > 0)
+                {
+                    novosItens.Add(new ItemReserva
+                    {
+                        EquipamentoId = ItemEquipamentoIds[i],
+                        Quantidade = ItemQuantidades[i]
+                    });
+                }
+            }
+
+            if (!novosItens.Any())
+            {
+                ModelState.AddModelError(string.Empty, "Selecione pelo menos um equipamento válido no seu carrinho.");
+                CarregarEquipamentos();
+                return Page();
+            }
+
+            // Busca as reservas ativas do mesmo dia e período para validação
+            var reservasNoMesmoPeriodo = await _context.Reservas
+                .Include(r => r.ItensReserva)
+                .Where(r => r.Data.Date == Reserva.Data.Date && r.Periodo == Reserva.Periodo && r.Status != "Cancelada")
+                .ToListAsync();
+
+            foreach (var itemPretendido in novosItens)
+            {
+                var equipamento = await _context.Equipamentos.FindAsync(itemPretendido.EquipamentoId);
+                if (equipamento == null) continue;
+
+                // Identifica dinamicamente a coluna de estoque físico total
+                var propEstoque = equipamento.GetType().GetProperty("Estoque") 
+                                  ?? equipamento.GetType().GetProperty("QuantidadeDisponivel")
+                                  ?? equipamento.GetType().GetProperty("QuantidadeEstoque")
+                                  ?? equipamento.GetType().GetProperties().FirstOrDefault(p => p.PropertyType == typeof(int) && p.Name != "Id");
+
+                int estoqueFisicoTotal = 0;
+                if (propEstoque != null)
+                {
+                    estoqueFisicoTotal = (int)(propEstoque.GetValue(equipamento) ?? 0);
+                }
+
+                int quantidadeJaComprometida = reservasNoMesmoPeriodo
+                    .SelectMany(r => r.ItensReserva)
+                    .Where(i => i.EquipamentoId == itemPretendido.EquipamentoId)
+                    .Sum(i => i.Quantidade);
+
+                int estoqueDisponivelReal = estoqueFisicoTotal - quantidadeJaComprometida;
+
+                if (itemPretendido.Quantidade > estoqueDisponivelReal)
+                {
+                    ModelState.AddModelError(string.Empty, 
+                        $"Estoque insuficiente para '{equipamento.Nome}'. " +
+                        $"Disponível neste período: {estoqueDisponivelReal} unidade(s). (Já reservados neste horário: {quantidadeJaComprometida}).");
+                    
+                    CarregarEquipamentos();
+                    return Page();
+                }
+
+                Reserva.ItensReserva.Add(itemPretendido);
+            }
+
+            _context.Reservas.Add(Reserva);
+            await _context.SaveChangesAsync();
+
+            return RedirectToPage("./Index");
         }
-
-        // Deduz do estoque disponível
-        equip.QuantidadeDisponivel -= item.Quantidade;
-
-        // Adiciona o item diretamente na lista relacionada da reserva
-        Reserva.ItensReserva.Add(new ItemReserva 
-        { 
-            EquipamentoId = item.EquipamentoId, 
-            Quantidade = item.Quantidade 
-        });
-    }
-
-    // Salva a reserva mãe e o EF Core já salvará os filhos automaticamente
-    _context.Reservas.Add(Reserva);
-    await _context.SaveChangesAsync();
-
-    return RedirectToPage("./Index");
-}
     }
 }

@@ -2,91 +2,115 @@
 @model Gest_oEquipamentos.Pages.Reservas.IndexModel
 
 @{
-    ViewData["Title"] = "Controle de Reservas";
+    ViewData["Title"] = "Painel de Reservas";
 }
 
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold" style="color: #ffcc00;">📋 Painel de Reservas</h2>
-        <a asp-page="Create" class="btn btn-outline-save fw-bold px-4">➕ Nova Reserva</a>
+        <h1 class="text-warning fw-bold mb-0">📋 Painel de Reservas</h1>
+        <a asp-page="Create" class="btn btn-outline-info fw-bold px-4 py-2 border-2">➕ Nova Reserva</a>
     </div>
 
-    <div class="card card-dark-blue shadow-lg">
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-dark-blue table-hover align-middle mb-0">
-                    <thead>
-                        <tr>
-                            <th class="ps-3">Professor</th>
-                            <th>Sala</th>
-                            <th>Equipamentos Reservados</th>
-                            <th>Data e Horário</th>
-                            <th>Período</th>
-                            <th>Status</th>
-                            <th class="text-center pe-3" style="width: 220px;">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (!Model.Reserva.Any())
-                        {
-                            <tr>
-                                <td colspan="7" class="text-center py-4" style="color: #a4b3c6;">
-                                    Nenhuma reserva registrada no momento.
-                                </td>
-                            </tr>
-                        }
-                        else
-                        {
-                            @foreach (var item in Model.Reserva) {
-                                <tr>
-                                    <td class="ps-3 fw-bold text-professor-highlight">
-                                        @Html.DisplayFor(modelItem => item.NomeProfessorBeneficiario)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Sala)
-                                    </td>
-                                    <td>
-                                        <!-- Exibe a lista de equipamentos em formato de badges -->
-                                        @if (item.ItensReserva != null && item.ItensReserva.Any())
-                                        {
-                                            <div class="d-flex flex-wrap gap-1">
-                                                @foreach (var subItem in item.ItensReserva)
-                                                {
-                                                    <span class="badge border border-secondary text-white bg-transparent">
-                                                        @subItem.Equipamento?.Nome (@subItem.Quantidade x)
-                                                    </span>
-                                                }
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            <span class="text-muted fs-7">Nenhum item</span>
-                                        }
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Data)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Periodo)
-                                    </td>
-                                    <td>
-                                        <span class="badge bg-transparent border border-warning text-warning">
-                                            @Html.DisplayFor(modelItem => item.Status)
-                                        </span>
-                                    </td>
-                                    <td class="text-center pe-3">
-                                        <div class="btn-group btn-group-sm" role="group">
-                                            <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-outline-table-edit fw-bold">Editar</a>
-                                            <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-outline-table-view">Ver</a>
-                                            <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-outline-table-delete">Excluir</a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
-            </div>
+    <div class="card card-dark-blue shadow mb-4">
+        <div class="card-body py-3">
+            <form method="get" class="row g-2 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label fw-bold text-light fs-7 mb-1">Buscar Professor</label>
+                    <input type="text" asp-for="BuscarProfessor" class="form-control" placeholder="Ex: Agamenon" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-bold text-light fs-7 mb-1">Sala</label>
+                    <input type="text" asp-for="BuscarSala" class="form-control" placeholder="Ex: c105" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-bold text-light fs-7 mb-1">Status</label>
+                    <select asp-for="BuscarStatus" class="form-control form-select">
+                        <option value="">-- Todos os Status --</option>
+                        <option value="Pendente">Pendente</option>
+                        <option value="Montada">Montada</option>
+                        <option value="Retirada">Retirada</option>
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex gap-1">
+                    <button type="submit" class="btn btn-outline-save w-100 fw-bold">Filtrar</button>
+                    <a asp-page="./Index" class="btn btn-outline-back d-flex align-items-center justify-content-center" title="Limpar Filtros">🔄</a>
+                </div>
+            </form>
         </div>
+    </div>
+
+    <div class="table-responsive shadow-lg rounded">
+        <table class="table table-dark-blue table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Professor</th>
+                    <th>Sala</th>
+                    <th>Equipamentos Reservados</th>
+                    <th>Data e Horário</th>
+                    <th>Período</th>
+                    <th class="text-center">Status</th>
+                    <th class="text-center" style="width: 220px;">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Reserva.Any())
+                {
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-4">Nenhuma reserva encontrada para os filtros aplicados.</td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var item in Model.Reserva)
+                    {
+                        <tr>
+                            <td class="fw-bold text-light">@Html.DisplayFor(modelItem => item.NomeProfessorBeneficiario)</td>
+                            <td><span class="badge bg-secondary">@Html.DisplayFor(modelItem => item.Sala)</span></td>
+                            <td>
+                                <div class="d-flex flex-wrap gap-1">
+                                    @if (item.ItensReserva == null || !item.ItensReserva.Any())
+                                    {
+                                        <span class="text-muted fs-7">Nenhum item</span>
+                                    }
+                                    else
+                                    {
+                                        foreach (var op in item.ItensReserva)
+                                        {
+                                            <span class="badge border border-secondary text-white-50 bg-transparent fs-7">
+                                                🛠️ @op.Equipamento?.Nome (x@(op.Quantidade))
+                                            </span>
+                                        }
+                                    }
+                                </div>
+                            </td>
+                            <td class="fs-7">@Html.DisplayFor(modelItem => item.Data)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Periodo)</td>
+                            <td class="text-center">
+                                @{
+                                    // Compara as strings diretamente para definir as cores dos badges
+                                    var classeBadge = item.Status switch
+                                    {
+                                        "Pendente" => "border-warning text-warning",
+                                        "Montada" => "border-info text-info",
+                                        "Retirada" => "border-success text-success",
+                                        _ => "border-secondary text-muted"
+                                    };
+                                }
+                                <span class="badge bg-transparent border @classeBadge fw-bold px-2 py-1 fs-7">
+                                    @item.Status
+                                </span>
+                            </td>
+                            <td class="text-center">
+                               <div class="d-flex justify-content-center gap-2">
+    <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning fw-bold px-2">Editar</a>
+    <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info fw-bold px-2">Ver</a>
+    <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger fw-bold px-2">Excluir</a>
+</div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
     </div>
 </div>
