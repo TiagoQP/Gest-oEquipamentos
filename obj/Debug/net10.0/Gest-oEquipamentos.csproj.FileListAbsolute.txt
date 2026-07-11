@@ -365,3 +365,5 @@
 /workspaces/Gest-oEquipamentos/obj/Debug/net10.0/Gest-oEquipamentos.genruntimeconfig.cache
 /workspaces/Gest-oEquipamentos/obj/Debug/net10.0/ref/Gest-oEquipamentos.dll
 /workspaces/Gest-oEquipamentos/obj/Debug/net10.0/compressed/hp0l399nzv-{0}-jp2hdccnlw-jp2hdccnlw.gz
+/workspaces/Gest-oEquipamentos/obj/Debug/net10.0/compressed/ztsmwqzxmw-{0}-80dxsk8gvu-80dxsk8gvu.gz
+/workspaces/Gest-oEquipamentos/obj/Debug/net10.0/compressed/3s2x50bz0n-{0}-wmg080w8wu-wmg080w8wu.gz
